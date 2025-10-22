@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADHD — Patient Education</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:16px 16px 64px}
+  header{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+  a{color:inherit}h1{margin:0}
+  .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid #ddd;text-decoration:none;margin:8px 0 16px}
+  .slides{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .slides img{width:100%;height:auto;border:1px solid #ddd;border-radius:12px}
+  .muted{color:#444}.disclaimer{margin-top:18px}.hidden{display:none}
+</style>
+</head><body>
+<header><a href="/education/" aria-label="Back">← Patient Education</a><h1>ADHD Patient Education</h1></header>
+<p class="muted">Educational only. No PHI. Emergencies: 911. Suicidal thoughts: 988 (U.S.).</p>
+
+<a class="btn" href="/education-assets/adhd/ADHD-Education.pdf" download>Download PDF</a>
+
+<div id="slides" class="slides" aria-live="polite"></div>
+<p id="count" class="muted"></p>
+
+<div class="disclaimer"><p class="muted">Educational only; not medical advice; no doctor–patient relationship.</p></div>
+
+<script>
+(function(){
+  const base='/education-assets/adhd/';
+  const pad=n=>String(n).padStart(2,'0');
+  const candidates=i=>[ `${base}adhd-slide-${pad(i)}.png`, `${base}ADHD${pad(i)}.png` ];
+
+  const ok=src=>new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>res(true);
+    img.onerror=()=>res(false);
+    img.src=src;
+  });
+
+  const slides=document.getElementById('slides');
+  const countEl=document.getElementById('count');
+
+  (async ()=>{
+    let shown=0, misses=0;
+    for(let i=1;i<=40;i++){
+      let found=null;
+      for(const src of candidates(i)){
+        if(await ok(src)){ found=src; break; }
+      }
+      if(found){
+        const el=document.createElement('img');
+        el.alt=`ADHD Education Slide ${i}`;
+        el.loading='lazy';
+        el.decoding='async';
+        el.src=found;
+        slides.appendChild(el);
+        shown++; misses=0;
+      } else {
+        misses++;
+        if(misses>=8) break;
+      }
+    }
+    console.log('ADHD images rendered:', shown);
+    countEl.textContent='Slides shown: '+shown;
+  })();
+})();
+</script>
+</body></html>

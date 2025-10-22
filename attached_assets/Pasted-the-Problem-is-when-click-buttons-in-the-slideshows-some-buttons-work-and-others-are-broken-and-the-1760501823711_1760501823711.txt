@@ -1,0 +1,109 @@
+the Problem is when click buttons in the slideshows, some buttons work and others are broken and the slideshows do not open properly. Your job is study the difference between the working ones and the broken ones and make them all work 100%
+
+I'll investigate the slideshow functionality to identify the differences between working and broken buttons, then fix them all.
+Let me check the actual slideshow HTML files to see which ones work and which don't:
+
+
+0123456789
+ actions taken
+I notice these don't have slideshows. Let me check if there are slides.json files:
+
+
+0123456789
+ actions taken
+Now let me check the education folder which likely has the slideshow implementation:
+
+
+0123456789
+ actions taken
+Now I understand! The education/adhd page loads slides dynamically. Let me check which buttons are being referenced and compare them to see what's working vs broken. Let me search for where buttons link to these slideshows:
+
+
+0123456789
+ files read
+Let me look at the React component to understand where the slideshow buttons are:
+
+
+Searched
+(education|slideshow|slides)
+Open
+Now let me check what slide images actually exist to identify the working vs broken conditions:
+
+
+0123456789
+ actions taken
+Now I understand the issue! The component looks for Slide1.PNG, Slide2.PNG, etc. but the directories only have empty slides.json files. Let me check the App routing to see how this page is accessed:
+
+Now let me check where buttons link to this slideshow page from the main site:
+
+
+Read
+src/App.tsx
+Open
+Perfect! Now I found it - the Header links to /slideshows. Let me check the Header component:
+
+
+Searched
+(slideshow|education|AdhdEducation)
+Open
+Now I understand the problem! Let me analyze:
+
+The slideshow page (AdhdEducation.tsx) has condition buttons
+It looks for slide images in /about-conditions/{condition-id}/Slide1.PNG, Slide2.PNG, etc.
+The problem is the condition IDs in the component don't match the actual folder structure
+Looking at line 38-59 of AdhdEducation.tsx, I see conditions like:
+
+'adhd' (should work if slides exist)
+'Generalized-Anxiety-Disorder' (with capitals and dashes)
+'Sleep Disorders' (with space)
+'social-anxiety-disorder' (lowercase with dashes)
+But the actual folders are:
+
+sleep-disorder (not Sleep Disorders)
+social-anxiety-disorder (exists)
+The issue is inconsistent naming between the condition IDs in the code and actual folder names. Let me check if there are any actual slide images anywhere:
+
+
+Read
+src/components/Header.tsx
+Open
+There are NO slide images at all! The problem is:
+
+No slide images exist - the folders only have empty slides.json files
+Inconsistent naming - condition IDs in the component don't match folder names
+Component expects images in format: /about-conditions/{condition-id}/Slide1.PNG, Slide2.PNG, etc.
+Let me create a task list and fix this:
+
+
+0123456789
+ commands executed
+Plan
+Analyze actual folder structure and condition button naming mismatches
+Fix condition ID naming to match actual HTML files and folder structure
+Create placeholder directories for all conditions so buttons work consistently
+Update component messaging for better user feedback
+Run build to verify changes work correctly
+Plan completed
+Open details
+Fix slideshow condition IDs
+
+Version 2
+
+
+all the slides are there for each disorder but you say they are not.  look more closely and find all the slides and put hem into the appropriate disorders
+
+You're right! Let me search more carefully for all the slide images:
+Excellent! I can see the slides ARE there! They're in directories with different naming patterns. Let me check all of them:
+
+
+0123456789
+ commands executed
+Perfect! Now I can see all the slides. The issue is that the folder names have mixed cases and spaces (like "Autism Spectrum Disorder" and "Generalized-Anxiety-Disorder"). Let me update the component to use the exact folder names:
+
+
+Count slides in each directory
+Open
+Plan
+Find all existing slide directories and count slides
+Update AdhdEducation component with correct condition IDs matching existing folders
+Build project to verify all changes work

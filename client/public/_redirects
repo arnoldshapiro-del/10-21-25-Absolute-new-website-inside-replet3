@@ -1,0 +1,12 @@
+/education /education/ 301!
+/education/adhd /education/adhd/ 301!
+/conditions/adhd /education/adhd/ 301
+/about-conditions/adhd /education/adhd/ 301
+/about-conditions /education/ 301
+/conditions /education/ 301
+/education/* /education/:splat 200
+/about-conditions/* /about-conditions/:splat 200
+/conditions/* /conditions/:splat 200
+/screening/* /screening/:splat 200
+
+/*    /index.html   200
